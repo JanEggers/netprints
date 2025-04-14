@@ -219,6 +219,10 @@ namespace NetPrintsEditor.Controls
 
         private void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            if (Graph == null)
+            {
+                return;
+            }
             Graph.SuggestionPin = null;
             var mousePos = Mouse.GetPosition(drawCanvas);
             Graph.UpdateSuggestions(mousePos.X, mousePos.Y);

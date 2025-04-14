@@ -34,6 +34,22 @@ namespace NetPrints.Core
         Executable,
     }
 
+    public class TargetFrameworks
+    {
+        public const string Net461 = "Net461";
+        public const string Netstandard20 = "Netstandard2.0";
+        public const string Net80 = "net8.0";
+        public const string Net90 = "net9.0";
+
+        public static IEnumerable<string> GetValues()
+        {
+            yield return Net461;
+            yield return Netstandard20;
+            yield return Net80;
+            yield return Net90;
+        }
+    }
+
     /// <summary>
     /// Project model.
     /// </summary>
@@ -41,12 +57,32 @@ namespace NetPrints.Core
     [AddINotifyPropertyChangedInterface]
     public class Project
     {
-        private static readonly IEnumerable<FrameworkAssemblyReference> DefaultReferences = new FrameworkAssemblyReference[]
+        private static IEnumerable<FrameworkAssemblyReference> GetDefaultFrameworkReferences(string version) => new FrameworkAssemblyReference[]
         {
-            new FrameworkAssemblyReference(".NETFramework/v4.5/System.dll"),
-            new FrameworkAssemblyReference(".NETFramework/v4.5/System.Core.dll"),
-            new FrameworkAssemblyReference(".NETFramework/v4.5/mscorlib.dll"),
+            new FrameworkAssemblyReference($".NETFramework/{version}/System.dll"),
+            new FrameworkAssemblyReference($".NETFramework/{version}/System.Core.dll"),
+            new FrameworkAssemblyReference($".NETFramework/{version}/mscorlib.dll"),
         };
+
+        private static IEnumerable<RuntimeAssemblyReference> GetDefaultRuntimeReferences(string version) 
+        {
+            return Directory.EnumerateFiles(System.IO.Path.Combine(RuntimeAssemblyReference.RuntimeRootFolder, version))
+                .Where(path => path.EndsWith(".dll"))
+                .Where(path => {
+                    try
+                    {
+                        Assembly.LoadFrom(path);
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+                })
+                .Select(path => path.Replace(RuntimeAssemblyReference.RuntimeRootFolder + "\\", ""))
+                .Select(relPath => new RuntimeAssemblyReference(relPath));
+              
+        } 
 
         private static readonly DataContractSerializer ProjectSerializer = new DataContractSerializer(typeof(Project));
 
@@ -67,6 +103,33 @@ namespace NetPrints.Core
         {
             get;
             set;
+        }
+
+        [DataMember]
+        public string TargetFramework
+        {
+            get;
+            set;
+        }
+
+        public void OnTargetFrameworkChanged()
+        {
+            References.RemoveRange(
+                References.OfType<FrameworkAssemblyReference>().AsEnumerable<CompilationReference>()
+                .Concat(References.OfType<RuntimeAssemblyReference>()).ToList());
+
+            switch (TargetFramework)
+            {
+                case TargetFrameworks.Net90:
+                    References.AddRange(GetDefaultRuntimeReferences("9.0.3"));
+                    break;
+                case TargetFrameworks.Net461:
+                    References.AddRange(GetDefaultFrameworkReferences("V4.6.1"));
+                    break;
+                default:
+                    References.AddRange(GetDefaultFrameworkReferences("V4.5"));
+                    break;
+            }
         }
 
         /// <summary>
@@ -185,19 +248,15 @@ namespace NetPrints.Core
         /// <param name="addDefaultReferences">Whether to add default references to the project.</param>
         /// <returns>The created project.</returns>
         public static Project CreateNew(string name, string defaultNamespace, bool addDefaultReferences=true,
-            ProjectCompilationOutput compilationOutput=ProjectCompilationOutput.All)
+            ProjectCompilationOutput compilationOutput=ProjectCompilationOutput.All, string targetFramework=TargetFrameworks.Net90)
         {
             Project project = new Project()
             {
                 Name = name,
                 DefaultNamespace = defaultNamespace,
-                CompilationOutput = compilationOutput
+                CompilationOutput = compilationOutput,
+                TargetFramework = targetFramework
             };
-
-            if (addDefaultReferences)
-            {
-                project.References.AddRange(DefaultReferences);
-            }
 
             return project;
         }

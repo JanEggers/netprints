@@ -27,6 +27,9 @@
                 <x:Type TypeName="npc:BinaryType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="TargetFrameworks" MethodName="GetValues" ObjectType="{x:Type npc:TargetFrameworks}">
+        </ObjectDataProvider>
     </Window.Resources>
 
     <mah:MetroWindow.Flyouts>
@@ -48,6 +51,7 @@
             <mah:Flyout x:Name="SettingsFlyout" Header="Settings" Position="Right" Width="300">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -78,6 +82,20 @@
                             IsEnabled="{Binding IsProjectOpen}"
                             ItemsSource="{Binding Source={StaticResource BinaryTypeItems}}"
                             SelectedItem="{Binding Project.OutputBinaryType}"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2" ToolTip="Targetframework to reference.">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="1" Grid.Column="0" Content="Target framework" VerticalAlignment="Center" />
+                        <ComboBox Grid.Row="1" Grid.Column="1"
+                            FontSize="12" Margin="4" 
+                            IsEnabled="{Binding IsProjectOpen}"
+                            ItemsSource="{Binding Source={StaticResource TargetFrameworks}}"
+                            SelectedItem="{Binding Project.TargetFramework}"/>
                     </Grid>
                 </Grid>
             </mah:Flyout>
