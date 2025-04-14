@@ -256,11 +256,10 @@ namespace NetPrintsEditor.Reflection
         #region IReflectionProvider
         public IEnumerable<TypeSpecifier> GetNonStaticTypes()
         {
-            return GetValidTypes().Where(
-                    t => t.IsPublic() && !(t.IsAbstract && t.IsSealed))
-                .OrderBy(t => t.ContainingNamespace?.Name)
-                .ThenBy(t => t.Name)
-                .Select(t => ReflectionConverter.TypeSpecifierFromSymbol(t));
+            return GetValidTypes()
+                .Where(t => t.IsPublic() && !(t.IsAbstract && t.IsSealed))
+                .Select(t => ReflectionConverter.TypeSpecifierFromSymbol(t))
+                .OrderBy(t => t.FullCodeName);
         }
 
         public IEnumerable<MethodSpecifier> GetOverridableMethodsForType(TypeSpecifier typeSpecifier)
