@@ -68,6 +68,11 @@ namespace NetPrintsEditor.ViewModels
                 TypeSpecifier.FromType<TypeNode>(),
                 TypeSpecifier.FromType<MakeArrayTypeNode>(),
             },
+            [typeof(TypeGraph)] = new List<object>()
+            {
+                TypeSpecifier.FromType<TypeNode>(),
+                TypeSpecifier.FromType<MakeArrayTypeNode>(),
+            },
         };
 
         public SuggestionListVM SuggestionViewModel { get; } = new SuggestionListVM();

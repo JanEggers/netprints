@@ -216,7 +216,7 @@ namespace NetPrintsEditor.ViewModels
                     {
                         TypeSpecifier selectedType = selectTypeDialog.SelectedType;
 
-                        if (selectedType.Equals(null))
+                        if (selectedType is null)
                         {
                             throw new Exception($"Type {selectTypeDialog.SelectedType} was not found using reflection.");
                         }

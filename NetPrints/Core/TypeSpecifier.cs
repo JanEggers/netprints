@@ -107,7 +107,18 @@ namespace NetPrints.Core
         {
             get
             {
-                return IsEnum || typeof(byte).Assembly.GetType(Name).IsPrimitive;
+                if (IsEnum) 
+                {
+                    return true;
+                }
+
+                if (Name == typeof(string).FullName) 
+                {
+                    return true;
+                }
+
+                var type = typeof(byte).Assembly.GetType(Name);
+                return type?.IsPrimitive ?? false;
             }
         }
 
