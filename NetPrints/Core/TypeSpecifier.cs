@@ -107,13 +107,7 @@ namespace NetPrints.Core
         {
             get
             {
-                return this == FromType<byte>() || this == FromType<char>()
-                    || this == FromType<short>() || this == FromType<ushort>()
-                    || this == FromType<int>() || this == FromType<uint>()
-                    || this == FromType<long>() || this == FromType<ulong>()
-                    || this == FromType<float>() || this == FromType<double>()
-                    || this == FromType<string>() || this == FromType<bool>()
-                    || IsEnum;
+                return IsEnum || typeof(byte).Assembly.GetType(Name).IsPrimitive;
             }
         }
 
@@ -349,6 +343,6 @@ namespace NetPrints.Core
             }
 
             return !a.Equals(b);
-        }
+        }        
     }
 }

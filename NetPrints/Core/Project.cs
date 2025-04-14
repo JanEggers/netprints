@@ -71,7 +71,7 @@ namespace NetPrints.Core
                 .Where(path => {
                     try
                     {
-                        Assembly.LoadFrom(path);
+                        Assembly.ReflectionOnlyLoadFrom(path);
                         return true;
                     }
                     catch (Exception)

@@ -66,36 +66,36 @@ namespace NetPrints.Translator
             }
 
             // Put quotes around string literals
-            if (type == TypeSpecifier.FromType<string>())
+            if (type.Name == typeof(string).FullName)
             {
                 return $"\"{obj}\"";
             }
-            else if (type == TypeSpecifier.FromType<float>())
+            else if (type.Name == typeof(float).FullName)
             {
                 return $"{obj}F";
             }
-            else if (type == TypeSpecifier.FromType<double>())
+            else if (type.Name == typeof(double).FullName)
             {
                 return $"{obj}D";
             }
-            else if (type == TypeSpecifier.FromType<uint>())
+            else if (type.Name == typeof(uint).FullName)
             {
                 return $"{obj}U";
             }
             // Put single quotes around char literals
-            else if (type == TypeSpecifier.FromType<char>())
+            else if (type.Name == typeof(char).FullName)
             {
                 return $"'{obj}'";
             }
-            else if (type == TypeSpecifier.FromType<long>())
+            else if (type.Name == typeof(long).FullName)
             {
                 return $"{obj}L";
             }
-            else if (type == TypeSpecifier.FromType<ulong>())
+            else if (type.Name == typeof(ulong).FullName)
             {
                 return $"{obj}UL";
             }
-            else if (type == TypeSpecifier.FromType<decimal>())
+            else if (type.Name == typeof(decimal).FullName)
             {
                 return $"{obj}M";
             }
