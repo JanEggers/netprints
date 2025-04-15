@@ -1,6 +1,7 @@
 ﻿using NetPrints.Core;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Xml;
 
 namespace NetPrints.Serialization
 {
@@ -20,7 +21,8 @@ namespace NetPrints.Serialization
         public static void SaveClass(ClassGraph cls, string outputPath)
         {
             using FileStream fileStream = File.Open(outputPath, FileMode.Create);
-            classSerializer.WriteObject(fileStream, cls);
+            using XmlWriter writer = XmlWriter.Create(fileStream, new XmlWriterSettings() { Indent = true }); 
+            classSerializer.WriteObject(writer, cls);
         }
 
         /// <summary>
