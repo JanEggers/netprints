@@ -97,7 +97,7 @@ namespace NetPrintsEditor.Reflection
                 try
                 {
                     string docPath = GetAssemblyDocumentationPath(assembly);
-                    if (docPath != null)
+                    if (docPath != null && File.Exists(docPath))
                     {
                         XmlDocument doc = new XmlDocument();
                         doc.Load(File.OpenRead(docPath));
