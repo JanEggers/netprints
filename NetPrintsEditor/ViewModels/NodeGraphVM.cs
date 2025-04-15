@@ -112,6 +112,10 @@ namespace NetPrintsEditor.ViewModels
                     if (odp.PinType.Value is TypeSpecifier pinTypeSpec)
                     {
                         // Add make delegate
+                        if (pinTypeSpec.GenericArguments.Count > 0)
+                        {
+                            pinTypeSpec = new TypeSpecifier(pinTypeSpec.Name, pinTypeSpec.IsEnum, pinTypeSpec.IsInterface, odp.Node.InputTypePins.Select(p => p.InferredType.Value));
+                        }
                         AddSuggestionsWithCategory("NetPrints", new[] { new MakeDelegateTypeInfo(pinTypeSpec, Graph.Class.Type) });
 
                         // Add variables and methods of the pin type
@@ -151,6 +155,13 @@ namespace NetPrintsEditor.ViewModels
                 {
                     if (idp.PinType.Value is TypeSpecifier pinTypeSpec)
                     {
+                        if (pinTypeSpec.GenericArguments.Count > 0) 
+                        {
+                            pinTypeSpec = new TypeSpecifier(pinTypeSpec.Name, pinTypeSpec.IsEnum, pinTypeSpec.IsInterface, idp.Node.InputTypePins.Select(p => p.InferredType.Value));
+                        }
+
+                        AddSuggestionsWithCategory("NetPrints", new[] { new MakeDelegateTypeInfo(pinTypeSpec, Graph.Class.Type) });
+
                         // Variables of base classes that inherit from needed type
                         foreach (var baseType in Graph.Class.AllBaseTypes)
                         {

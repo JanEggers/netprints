@@ -110,22 +110,7 @@ namespace NetPrintsEditor.ViewModels
             }
             else if (selectedValue is MakeDelegateTypeInfo makeDelegateTypeInfo)
             {
-                var methods = App.ReflectionProvider.GetMethods(
-                    new Reflection.ReflectionProviderMethodQuery()
-                    .WithType(makeDelegateTypeInfo.Type)
-                    .WithVisibleFrom(makeDelegateTypeInfo.FromType));
-
-                SelectMethodDialog selectMethodDialog = new SelectMethodDialog()
-                {
-                    Methods = methods,
-                };
-
-                if (selectMethodDialog.ShowDialog() == true)
-                {
-                    // MakeDelegateNode(Method method, MethodSpecifier methodSpecifier)
-
-                    AddNode<MakeDelegateNode>(selectMethodDialog.SelectedMethod);
-                }
+                MakeDelegateNode(makeDelegateTypeInfo);
             }
             else if (selectedValue is TypeSpecifier t)
             {
@@ -242,6 +227,38 @@ namespace NetPrintsEditor.ViewModels
                     // Build a type node
                     AddNode<TypeNode>(t);
                 }
+            }
+        }
+
+        private void MakeDelegateNode(MakeDelegateTypeInfo makeDelegateTypeInfo)
+        {
+            var query = new Reflection.ReflectionProviderMethodQuery();
+                                //.WithType(makeDelegateTypeInfo.Type)
+                                //.WithVisibleFrom(makeDelegateTypeInfo.FromType);
+
+            if (makeDelegateTypeInfo.Type.Name == typeof(Func<>).FullName.Replace("`1", ""))
+            {
+                query.WithReturnType((TypeSpecifier)makeDelegateTypeInfo.Type.GenericArguments.Last());
+
+                if (makeDelegateTypeInfo.Type.GenericArguments.Count > 1)
+                {
+                    //query.WithType((TypeSpecifier)makeDelegateTypeInfo.Type.GenericArguments.First());
+                    //query.WithArgumentType((TypeSpecifier)makeDelegateTypeInfo.Type.GenericArguments.First());
+                }
+            }
+
+            var methods = App.ReflectionProvider.GetMethods(query);
+
+            SelectMethodDialog selectMethodDialog = new SelectMethodDialog()
+            {
+                Methods = methods,
+            };
+
+            if (selectMethodDialog.ShowDialog() == true)
+            {
+                // MakeDelegateNode(Method method, MethodSpecifier methodSpecifier)
+
+                AddNode<MakeDelegateNode>(selectMethodDialog.SelectedMethod);
             }
         }
     }
