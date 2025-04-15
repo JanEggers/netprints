@@ -391,9 +391,9 @@ namespace NetPrints.Translator
                 builder.AppendLine($"// {node}");
             }
 
-            if (nodeTypeHandlers.ContainsKey(node.GetType()))
+            if (nodeTypeHandlers.TryGetValue(node.GetType(), out var handler))
             {
-                nodeTypeHandlers[node.GetType()][pinIndex](this, node);
+                handler[pinIndex](this, node);
             }
             else
             {
