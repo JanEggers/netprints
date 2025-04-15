@@ -180,7 +180,7 @@ namespace NetPrints.Translator
                 NodeOutputDataPin pin = v.Key;
                 string variableName = v.Value;
 
-                if (!(pin.Node is MethodEntryNode))
+                if (!(pin.Node is ExecutionEntryNode))
                 {
                     builder.AppendLine($"{pin.PinType.Value.FullCodeName} {variableName} = default({pin.PinType.Value.FullCodeName});");
                 }

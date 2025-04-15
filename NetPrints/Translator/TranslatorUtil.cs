@@ -12,7 +12,6 @@ namespace NetPrints.Translator
 {
     public static class TranslatorUtil
     {
-        public const string VariablePrefix = "var";
         public const string TemporaryVariablePrefix = "temp";
 
         public readonly static Dictionary<MemberVisibility, string> VisibilityTokens = new Dictionary<MemberVisibility, string>()
@@ -123,7 +122,7 @@ namespace NetPrints.Translator
 
             while(true)
             {
-                string uniqueName = i == 1 ? $"{VariablePrefix}{name}" : $"{VariablePrefix}{name}{i}";
+                string uniqueName = i == 1 ? name : $"{name}{i}";
 
                 if (!names.Contains(uniqueName))
                 {

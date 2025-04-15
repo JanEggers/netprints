@@ -576,7 +576,7 @@ namespace NetPrintsEditor.ViewModels
         /// </summary>
         public bool ShowLeftPinButtons
         {
-            get => node is MakeArrayNode || node is MethodEntryNode || (node is ReturnNode && node == Method.MainReturnNode) || node is ClassReturnNode;
+            get => node is MakeArrayNode || node is ExecutionEntryNode || (node is ReturnNode && node == Method.MainReturnNode) || node is ClassReturnNode;
         }
 
         /// <summary>
@@ -597,7 +597,7 @@ namespace NetPrintsEditor.ViewModels
             {
                 makeArrayNode.AddElementPin();
             }
-            else if (node is MethodEntryNode entryNode)
+            else if (node is ExecutionEntryNode entryNode)
             {
                 entryNode.AddArgument();
             }

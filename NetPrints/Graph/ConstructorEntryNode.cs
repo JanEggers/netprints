@@ -20,10 +20,8 @@ namespace NetPrints.Graph
             : base(constructor)
         {
             AddOutputExecPin("Exec");
-
-            // TODO: Add output data and type pins for constructor graph
         }
-
+               
         public override string ToString()
         {
             return $"{ConstructorGraph.Class.Name} Constructor Entry";
